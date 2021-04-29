@@ -1,6 +1,6 @@
 # CESI 2020/2021 - Node.js - TIC TAC TOE API
 
-> NOM et PRENOM des membres du binome
+RICHARD Quentin et HIRSCH Claude
 
 ## Description
 
