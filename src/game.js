@@ -1,3 +1,6 @@
+var fs = require('fs');
+// file is included here:
+eval(fs.readFileSync('game2.js')+'');
 const util = require('util');
 const readline = require('readline');
 const rl = readline.createInterface({
@@ -10,22 +13,21 @@ const question = util.promisify(rl.question).bind(rl);
 async function startGame(){
     let finish = false;
     let nb_turn = 1;
+    displayBoard();
     do{
         let rep = "";
         let playerMark = (nb_turn%2>0) ? "X" : "O";
-        //appel du board
         let questionToDisplay = setQuestion(nb_turn);
         try{
             rep = await question( `${questionToDisplay} ? `);
             console.log("reponse : ",rep);
         }catch(err){
-            console.log("error : ",err);
+            // console.log("error : ",err);
             rep = err;
         }
         if(isCorrect(rep)){
-            //isPlayed(rep); TODO quand git pull
-            //modifier board
-            //changeBoardValue(rep,playerMark)
+            isPlayed(rep); 
+            changeBoardValue(rep,playerMark)
             nb_turn++;
             if(nb_turn >= 5 && isVictory(rep)){
                 finish = true;
@@ -40,15 +42,6 @@ function isCorrect(rep){
         return true;
     }else{
         return false;
-    }
-}
-
-function isVictory(lastTurn){
-    //appel le board
-    if(lastTurn%2>0){//Impair
-
-    }else{//Pair
-
     }
 }
 

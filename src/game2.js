@@ -43,12 +43,15 @@ function isPlayed(index){
 function isVictory(index) {
   let victory = false
   winCombinaison.forEach((value) => {
+    console.log(value);
     if (value.includes(index)) {
       if (board[value[0]] === board[value[1]] && board[value[1]] === board[value[2]]) {
         victory = true;
       }
     }
   })
+  console.log(index);
+  console.log(victory);
   return victory;
 };
 
