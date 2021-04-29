@@ -20,21 +20,21 @@ async function startGame(){
         let questionToDisplay = setQuestion(nb_turn);
         try{
             rep = await question( `${questionToDisplay} ? `);
-            console.log("reponse : ",rep);
+            // console.log("reponse : ",rep);
         }catch(err){
             // console.log("error : ",err);
             rep = err;
         }
-        if(isCorrect(rep)){
-            isPlayed(rep); 
+        if(isCorrect(rep) && !isPlayed(rep)){
             changeBoardValue(rep,playerMark)
             nb_turn++;
-            if(nb_turn >= 5 && isVictory(rep)){
+            if(nb_turn >= 5 && isVictory(parseInt(rep))){
                 finish = true;
             }
         }
     }while(!finish);
-
+    let joueurNumber = (nb_turn%2>0) ? "Joueur 2" : "Joueur 1";
+    console.log(`Victoire du ${joueurNumber}, gg ez`);
 }
 
 function isCorrect(rep){
