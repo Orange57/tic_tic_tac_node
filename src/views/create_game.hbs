@@ -53,21 +53,26 @@
 </head>
 <body>
     <div class="game_creator_container">
-        <div class="name_container">
-            <div class="label_name">
-                Merci de saisir un pseudo
+        <form action="/create_game" method="post">
+            <div class="name_container">
+                <div class="label_name">
+                    Merci de saisir un pseudo
+                </div>
+                <input class="input_name" name="pseudo" />
+                {{#if post.error}}
+                <span class="error"> {{post.error}} </span>
+                {{/if}}
             </div>
-            <input class="input_name" />
-        </div>
-        <div class="create_game_container">
-            <button>Créer une partie</button>
-        </div>
-        <div class="join_game_container">
-            <div class="label_join_game">
-                Saisir l'ID de la partie en cours
+            <div class="create_game_container">
+                <button type="submit">Créer une partie</button>
             </div>
-            <input class="id_game" />
-        </div>
+            <div class="join_game_container">
+                <div class="label_join_game">
+                    Saisir l'ID de la partie en cours
+                </div>
+                <input class="id_game" name="gameId" />
+            </div>
+        </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
