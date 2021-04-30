@@ -1,40 +1,51 @@
-let app = require('express')()
+const app = require('express')();
 const exphbs = require('express-handlebars');
-let bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const session = require('express-session');
 
-
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(session(({
+  secret: 'soItBeggins',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false },
+})))
 
 app.engine('hbs', exphbs({
   defaultLayout: 'main',
-  extname: '.hbs'
+  extname: '.hbs',
 }));
 
 app.set('view engine', 'hbs');
 
 app.get('/', (request, response) => {
+  console.log(request.session)
   response.render('index');
-})
-
-app.get('/create_game' ,(req,res) =>{
-  res.render('create_game');
 });
 
-app.get('/game' ,(req,res) =>{
-  res.render('game');
-});
-
-app.post('/create_game', (req,res) =>{
-  if (req.body.pseudo === ''){
-    res.render('create_game', {
-      post: {
-        error: "Merci d'entrer un pseudo"
-      }
-    });
-  } else {
-    res.redirect('/game');
+app.get('/create_game', (request, response) => {
+  if (request.session.error) {
+    response.locals.error = request.session.error;
   }
-})
+  response.render('create_game');
+});
 
-app.listen(8080)
+app.get('/game', (request, response) => {
+  if (request.session.pseudo) {
+    response.locals.pseudo = request.session.pseudo;
+  }
+  response.render('game');
+});
+
+app.post('/create_game', (request, response) => {
+  if (request.body.pseudo === '') {
+    request.session.error = "Merci d'entrer un pseudo"
+    response.redirect('/create_game');
+  } else {
+    request.session.pseudo = request.body.pseudo
+    response.redirect('/game');
+  }
+});
+
+app.listen(8080);
