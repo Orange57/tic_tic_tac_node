@@ -1,5 +1,6 @@
 const path = require('path');
 const { DefinePlugin, HotModuleReplacementPlugin } = require('webpack');
+const NodemonPlugin = require('nodemon-webpack-plugin'); // Ding
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -40,6 +41,7 @@ module.exports = {
     new HotModuleReplacementPlugin({
       multiStep: true,
     }),
+    new NodemonPlugin(),
   ],
   externals: [{
     fsevents: 'fsevents',
