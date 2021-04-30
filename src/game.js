@@ -26,13 +26,17 @@ class TicTacToe {
             if(this.isCorrect(rep) && !this.isPlayed(rep)){
                 this.changeBoardValue(rep,playerMark)
                 nb_turn++;
-                if(nb_turn >= 5 && this.isVictory(parseInt(rep))){
+                if(nb_turn >= 5 && this.isVictory(parseInt(rep)) || nb_turn > 9){
                     finish = true;
                 }
             }
         }while(!finish);
-        let joueurNumber = (nb_turn%2>0) ? "Joueur 2" : "Joueur 1";
-        console.log(`Victoire du ${joueurNumber}, gg ez`);
+        if(nb_turn > 9){
+            console.log(`Egalité`);
+        }else{
+            let joueurNumber = (nb_turn%2>0) ? "Joueur 2" : "Joueur 1";
+            console.log(`Victoire du ${joueurNumber}, gg ez`);
+        }
     }
 
     isCorrect(rep){
