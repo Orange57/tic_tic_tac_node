@@ -1,4 +1,5 @@
 const express = require('express');
+const exphbs = require('express-handlebars');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -6,9 +7,13 @@ const ServerIo = require("socket.io");
 const io = new ServerIo(server);
 const port = 3000
 
+app.engine('hbs', exphbs({
+    defaultLayout: 'main',
+    extname: '.hbs'
+  }));
+app.set('view engine', 'hbs');
 app.get('/' ,(req,res) =>{
-    res.sendFile(__dirname + '/index.html');
-    // res.send('Hello World!');
+    res.render('create_game');
 });
 
 io.on('connection', (socket) => {
