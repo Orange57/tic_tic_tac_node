@@ -2,6 +2,10 @@ const app = require('express')();
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const http = require('http');
+const server = http.createServer(app);
+const serverIO = require("socket.io");
+const io = new serverIO(server);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -22,6 +26,11 @@ app.set('view engine', 'hbs');
 app.get('/', (request, response) => {
   console.log(request.session)
   response.render('index');
+  io.on('connection', (socket) => {
+    socket.on('changePage', (e) => {
+      io.emit('canChangePage', "/create_game");
+    });
+  });
 });
 
 app.get('/create_game', (request, response) => {
@@ -48,4 +57,4 @@ app.post('/create_game', (request, response) => {
   }
 });
 
-app.listen(8080);
+server.listen(8080);
