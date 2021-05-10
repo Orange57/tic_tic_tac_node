@@ -1,6 +1,9 @@
 const path = require('path');
 const { DefinePlugin, HotModuleReplacementPlugin } = require('webpack');
 const NodemonPlugin = require('nodemon-webpack-plugin'); // Ding
+const dotenv = require('dotenv').config( {
+  path : path.join(__dirname, '.env')
+})
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -8,13 +11,13 @@ const mode = {
   local: 'development',
   development: 'development',
   testing: 'development',
-  staging: 'production',
-  production: 'production',
+  staging: 'development',
+  production: 'development',
 };
 
 module.exports = {
   context: __dirname,
-  mode: mode[NODE_ENV],
+  mode: 'development',
   entry: './src/index.js',
   target: 'node',
   devtool: 'eval-source-map',
@@ -23,7 +26,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'handle.js',
+    filename: 'index.js',
   },
   module: {
     rules: [{

@@ -13,20 +13,21 @@ const serverIO = require("socket.io");
 const { pathToFileURL } = require("url");
 const io = new serverIO(server);
 
+const Vue = require('vue');
+Vue.config.devtools = true;
+
 const vueOptions = {
   pagesPath: path.join(__dirname, "/views"),
+  head:{
+    title: 'It will be a pleasure',
+    scripts:[
+      { src: "/socket.io/socket.io.js"},
+    ],
+    styles:[
+      {style : "https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"},
+    ],
+  },
 };
-
-expressVue.use(app, vueOptions).then(() => {
-    app.get('/', (req, res, next) => {
-      console.log(req.vueOptions.rootPath);
-      const data = {otherData: 'Something Else'};
-      console.log(vueOptions)
-      res.renderVue('main.vue', data);
-  });
-});
-
-/*
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -36,6 +37,34 @@ app.use(session(({
   saveUninitialized: true,
   cookie: { secure: false },
 })))
+
+expressVue.use(app, vueOptions).then(() => {
+
+    app.get('/', (req, res, next) => {
+      const data = {otherData: 'Something Else'};
+      res.renderVue('index.vue', data, req.vueOptions);
+  });
+
+    app.get('/create_game', (req, res, next) => {
+      const data = {otherData: 'Something Else'};
+      res.renderVue('create_game.vue', data, req.vueOptions);
+  });
+
+    app.get('/game', (req, res, next) => {
+      const data = {otherData: 'Something Else'};
+      res.renderVue('game.vue', data, req.vueOptions);
+  });
+
+});
+io.on('connection', (socket) => {
+  console.log('a user connected : ');
+  io.emit('connexion', "a user connected");
+});
+server.listen(8080);
+
+/*
+
+
 
 app.engine('hbs', expressVue({
   defaultLayout: 'main',
@@ -78,7 +107,6 @@ app.post('/create_game', (request, response) => {
   }
 });
 */
-server.listen(8080);
 
 // let game = new TicTacToe();
 // game.startGame();

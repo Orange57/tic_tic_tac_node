@@ -5,6 +5,7 @@ module.exports = {
       {
         targets: {
           node: 'current',
+          VUE_DEV : true,
         },
       },
     ],
