@@ -1,41 +1,56 @@
 class TicTacToe {
 
-    util = require('util');
-    readline = require('readline');
-    rl = this.readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-    });
-    question = this.util.promisify(this.rl.question).bind(this.rl);
+    // util = require('util');
+    // readline = require('readline');
+    // rl = this.readline.createInterface({
+    // input: process.stdin,
+    // output: process.stdout
+    // });
+    // question = this.util.promisify(this.rl.question).bind(this.rl);
+
+    /*  ----    */
+    finish = false;
+    nb_turn = 1;
+    playerHaveToPlay = "X";
+
+
 
     async startGame(){
-        let finish = false;
-        let nb_turn = 1;
+        this.getQuestion();
+    }
+
+
+    getQuestion(){
+        let questionToDisplay = this.setQuestion(this.nb_turn);
+        console.log(questionToDisplay);
         this.displayBoard();
-        do{
-            let rep = "";
-            let playerMark = (nb_turn%2>0) ? "X" : "O";
-            let questionToDisplay = this.setQuestion(nb_turn);
-            try{
-                rep = await this.question( `${questionToDisplay} ? `);
-                // console.log("reponse : ",rep);
-            }catch(err){
-                // console.log("error : ",err);
-                rep = err;
-            }
-            if(this.isCorrect(rep) && !this.isPlayed(rep)){
-                this.changeBoardValue(rep,playerMark)
-                nb_turn++;
-                if(nb_turn >= 5 && this.isVictory(parseInt(rep)) || nb_turn > 9){
-                    finish = true;
+    }
+
+    playTurn(rep,playerWhoWantToPlay){
+        if(!this.finish){
+            if(this.isCorrect(rep) && !this.isPlayed(rep) && playerWhoWantToPlay == this.playerHaveToPlay){
+                this.changeBoardValue(rep,this.playerHaveToPlay)
+                this.nb_turn++;
+                if(this.nb_turn >= 5 && this.isVictory(parseInt(rep)) || this.nb_turn > 9){
+                    this.finish = true;
                 }
+                if(this.nb_turn > 9){
+                    console.log(`Egalité`);
+                    this.displayBoard();
+                }else if(this.finish){
+                    let joueurNumber = (this.nb_turn%2>0) ? "Joueur 2" : "Joueur 1";
+                    console.log(`Victoire du ${joueurNumber}, gg ez`);
+                    this.displayBoard();
+                }else{
+                    this.playerHaveToPlay = (this.nb_turn%2>0) ? "X" : "O";
+                    this.getQuestion();
+                }
+            }else{
+                console.log("tour invalide");
+                this.displayBoard();
             }
-        }while(!finish);
-        if(nb_turn > 9){
-            console.log(`Egalité`);
         }else{
-            let joueurNumber = (nb_turn%2>0) ? "Joueur 2" : "Joueur 1";
-            console.log(`Victoire du ${joueurNumber}, gg ez`);
+            console.log("partie terminée, merci d'en relancer une");
         }
     }
 
@@ -47,7 +62,7 @@ class TicTacToe {
         }
     }
 
-    setQuestion(nbTurn){
+    setQuestion(nbTurn){        
         if( nbTurn%2>0 ){ //Impair 1er joueur
             return "Joueur 1 (X) : Votre choix";
         }else{ //Pair 2eme joueur
@@ -91,7 +106,7 @@ class TicTacToe {
     
     changeBoardValue(index, sign) {
         this.board[index] = ' ' + sign + ' ';
-        this.displayBoard();
+        // this.displayBoard();
     }
     
     isPlayed(index){
@@ -111,6 +126,18 @@ class TicTacToe {
     };
 
 }
-let game = new TicTacToe();
-game.startGame();
+// let game = new TicTacToe();
+// // let game2 = new TicTacToe();
+// game.startGame();
+// game.playTurn("1","X"); //X
+// game.playTurn("2","O"); //O
+// game.playTurn("4","X"); //X
+// game.playTurn("7","O"); //O
+// game.playTurn("5","X"); //X
+// game.playTurn("9","O"); //O
+// game.playTurn("8","X"); //X
+// game.playTurn("6","O"); //O
+// game.playTurn("3","X"); //X egalité??
+// // game2.startGame();
+
 
