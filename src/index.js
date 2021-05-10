@@ -1,3 +1,7 @@
+let fs = require("fs");
+let vm = require("vm");
+vm.runInThisContext(fs.readFileSync(__dirname + "/game.js"))
+
 const app = require('express')();
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
@@ -58,3 +62,7 @@ app.post('/create_game', (request, response) => {
 });
 
 server.listen(8080);
+
+// let game = new TicTacToe();
+// game.startGame();
+// game.playTurn("1","X"); //X
