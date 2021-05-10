@@ -1,15 +1,32 @@
+const path = require("path");
 let fs = require("fs");
 let vm = require("vm");
 vm.runInThisContext(fs.readFileSync(__dirname + "/game.js"))
 
 const app = require('express')();
-const exphbs = require('express-handlebars');
+const expressVue = require('express-vue');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const http = require('http');
 const server = http.createServer(app);
 const serverIO = require("socket.io");
+const { pathToFileURL } = require("url");
 const io = new serverIO(server);
+
+const vueOptions = {
+  pagesPath: path.join(__dirname, "/views"),
+};
+
+expressVue.use(app, vueOptions).then(() => {
+    app.get('/', (req, res, next) => {
+      console.log(req.vueOptions.rootPath);
+      const data = {otherData: 'Something Else'};
+      console.log(vueOptions)
+      res.renderVue('main.vue', data);
+  });
+});
+
+/*
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -20,7 +37,7 @@ app.use(session(({
   cookie: { secure: false },
 })))
 
-app.engine('hbs', exphbs({
+app.engine('hbs', expressVue({
   defaultLayout: 'main',
   extname: '.hbs',
 }));
@@ -60,7 +77,7 @@ app.post('/create_game', (request, response) => {
     response.redirect('/game');
   }
 });
-
+*/
 server.listen(8080);
 
 // let game = new TicTacToe();
